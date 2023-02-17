@@ -27,7 +27,8 @@ def load_content_items(content_directory):
             frontmatter, content = re.split("^\+\+\+\+\+$", file.read(), 1, re.MULTILINE)
         item = toml.loads(frontmatter)
         item['content'] = markdown.markdown(content)
-
+        item['slug'] = os.path.splitext(os.path.basename(file.name))[0]
+        item['url'] = f"/{item['date'].year}/{item['date'].month:0>2}/{item['date'].day:0>2}/{item['slug']}/"
         items.append(item)
 
     # sort in reverse chronological order
@@ -36,6 +37,47 @@ def load_content_items(content_directory):
     return items
 
 
+def load_templates(template_directory):
+    """
+    THis function uses Jinja to create a Jinja environment that knows to look for templates in a paticular directory.
+    """
+    file_sys_loader = jinja2.FileSystemLoader(template_directory)
+    return jinja2.Environment(loader=file_sys_loader)
+
+
+def render_site(config, content, environment, output_directory):
+
+    #Remove output directory and all its content if it exists and create a fresh output directory.
+    if os.path.exists(output_directory):
+        shutil.rmtree(output_directory)
+    os.mkdir(output_directory)
+
+    #Create a homepage
+    index_template = environment.get_template('index.html')
+    with open(f"{output_directory}/index.html", 'w') as file:
+        file.write(index_template.render(config=config,content=content))
+
+    #Create post pages
+    post_template = environment.get_template("post.html")
+    for item in content["posts"]:
+        path = f"{output_directory}/{item['url']}"
+        pathlib.Path(path).mkdir(parents=True, exist_ok=True)
+        with open(path+"index.html", 'w') as file:
+            file.write(post_template.render(this=item, config=config, content=content))
+
+
+    #Create static files
+
+    #Copy the file from our static directory to our public directory
+    distutils.dir_util.copy_tree('static', 'public')
+
 def main():
     #load the configurations
     config = load_config("config.toml")
+
+    content = {
+        "posts": load_content_items("content/posts")
+    }
+
+    environment = load_templates('layout')
+    render_site(config, content, environment, "public")
