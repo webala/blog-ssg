@@ -17,6 +17,7 @@ I used `Python`, `Jinja2`, `markdown`, `toml`
 ## Setup locally
 - download or clone the repository
 - activate the virtual environment using the command `pipenv shell`
+- download the project dependencies using `pipenv install`
 
 If pipenv is not installed in your machine, you can install it using the command `pip3 install pipenv`
 
