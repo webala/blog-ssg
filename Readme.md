@@ -25,3 +25,8 @@ If pipenv is not installed in your machine, you can install it using the command
     - cd into public
     - run `python3 -m http.server`
 
+
+## References
+[Build a simpla static site generator](https://www.youtube.com/watch?v=Ph7oJDR71Jc)
+[Create a static site generator with Python](https://docs.replit.com/tutorials/python/static-site-generator)
+[Toml documentation](https://toml.io/en/)
