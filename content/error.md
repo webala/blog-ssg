@@ -2,4 +2,4 @@ title = "Error page"
 
 +++++
 
-This is the error page.
+Oops! Something went wrong. Please contact the owner of this site.

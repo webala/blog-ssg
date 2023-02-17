@@ -8,4 +8,30 @@ h1 {
     margin: 0 auto;
     max-width: 40em;
     line-height: 1.2em;
+    background: black;
+    color: white;
+    font-family: sans-serif;
+  }
+
+  .nav {
+    display: flex;
+    gap: 20px;
+  }
+
+  .post {
+    margin-bottom: 20px;
+  }
+
+  li {
+    list-style: none;
+    margin-bottom: 10px;
+  }
+
+  a {
+    color: rgb(34, 172, 158);
+    transition:  .3s ease-in;
+  }
+
+  a:hover {
+    color: blue;
   }
