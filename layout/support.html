@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+{% import "macros.html" as macros %} {{ macros.head(config.title) }}
+<body>
+    {{ macros.nav() }}
+    <h1>{{content.title}}</h1>
+    <p>{{content.content}}</p>
+</body>
+</html>
