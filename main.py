@@ -7,8 +7,9 @@ import os, glob, pathlib, shutil, distutils.dir_util
 def load_config(config_filename):
     """
     This function takes in a filename with the sites configurations.
-    It reads the configuration file then formats it using toml and returns a dictionary of configurations.
+    It reads the configuration file then using toml it returns a dictionary of configurations.
     """
+
     with open(config_filename, 'r') as config_file:
         return toml.loads(config_file.read())
 
@@ -16,11 +17,12 @@ def load_config(config_filename):
 def load_content_items(content_directory):
     """
     THis function takes in a directory name containing our content files with our posts.
-    Using glob.glob, we loop through an array of files with the .md extension,
+    We loop through an array of files with the .md extension,
     then we use a regular exression to split the post and the title and date.
-    We then use toml to create a dictionary of the post data, then we append the post content into the dictionary
-    we then append the post dictionary into an array of posts called items then we return the array.
+    We then use toml to create a dictionary of the post data, then we append the post content into the dictionary.
+    We then append the post dictionary into an array of posts called items then we return the array.
     """
+
     items = []
     for fn in glob.glob(f"{content_directory}/*.md"):
         with open(fn, 'r') as file:
@@ -37,6 +39,10 @@ def load_content_items(content_directory):
     return items
 
 def load_support_content(file_path):
+    """
+    This function takes in a filepath of a markdown file and returns a dictionary containing the title of the page 
+    and the content of the page
+    """
     with open(file_path, 'r') as file:
         frontmatter, content = re.split("^\+\+\+\+\+$", file.read(), 1, re.MULTILINE)
 
@@ -55,6 +61,10 @@ def load_templates(template_directory):
 
 
 def render_site(config, content, environment, output_directory):
+
+    """
+    This is the function that renders the site.
+    """
 
     #Remove output directory and all its content if it exists and create a fresh output directory.
     if os.path.exists(output_directory):
@@ -86,6 +96,7 @@ def render_site(config, content, environment, output_directory):
     #Create static files
 
     #Copy the files from our static directory to our public directory
+    #This is so as to make the files accessible to the templates within which they are linked.
     distutils.dir_util.copy_tree('static', 'public')
 
 
@@ -96,14 +107,14 @@ def main():
     config = load_config("config.toml")
 
 
-    #Create content for the different pages
+    #Get content for the different pages
     content = {
         "posts": load_content_items("content/posts"),
         "about": load_support_content('content/about.md'),
         "error": load_support_content('content/error.md')
     }
 
-    #load the template environment where all out layout are stored
+    #load the template environment where all our layouts are stored
     environment = load_templates('layout')
     render_site(config, content, environment, "public")
 
